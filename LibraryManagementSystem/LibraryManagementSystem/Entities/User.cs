@@ -6,22 +6,23 @@ namespace LibraryManagementSystem.API.Entities
 {
     public class User :BaseEntity
     {
-        [Key]
-        public int id { get; set; }
-        public string FullName { get; set; }
+        [MaxLength(50)]
+        public required string FullName { get; set; }
+        [MaxLength(50)]
         public string Address { get; set; }
-        public string  Username { get; set; }
-        public string PasswordHash { get; set; }
+        public required string Username { get; set; }
+       //public required string Password { get; set; }
+        public required string PasswordHash { get; set; }
         [EmailAddress]
         public string Email { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
 
-        [NotMapped]
         [Required]
         [MaxLength(20)]
         public string Role { get; set; } 
 
-        [Required]
-        public DateTime RegisteredAt { get; set; }
+        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Penalty> Penalties { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }
