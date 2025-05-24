@@ -1,0 +1,56 @@
+﻿@page "/authors"
+@inject HttpClient Http
+
+<PageTitle>Authors</PageTitle>
+
+<h1>Authors</h1>
+
+@if (authors == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!authors.Any())
+{
+    <p>No authors found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Biography</th>
+                <th>Date of Birth</th>
+                <th>Is Alive</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in authors)
+            {
+                <tr>
+                    <td>@author.Name</td>
+                    <td>@author.Biography</td>
+                    <td>@author.DateOfBirth.ToShortDateString()</td>
+                    <td>@(author.IsAlive ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<AuthorDTO>? authors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authors = await Http.GetFromJsonAsync<List<AuthorDTO>>("api/Authors");
+    }
+
+    public class AuthorDTO
+    {
+        public string Name { get; set; }
+        public string Biography { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public bool IsAlive { get; set; }
+    }
+}
